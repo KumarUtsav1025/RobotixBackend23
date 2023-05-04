@@ -5,7 +5,10 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.decorators import APIView, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
+
+
 
 from .models import *
 from .serializers import *
@@ -14,7 +17,22 @@ from .serializers import *
 # Create your views here.
 class TeamApi(APIView):
 
-    def get(self, request, *args, **kwargs):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        if request.user.is_admin:
+            data = request.data
+            serializer = TeamSerializer(data= data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response({'status' : 'True','body': serializer.data}, status.HTTP_200_OK)
+            else:
+                return Response({'status' : 'False','body': serializer.errors}, status.HTTP_400_BAD_REQUEST)
+        else: 
+            return Response({'status' : 'False','message': 'Unauthorized Access Prohibited'}, status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])   
+def get_team(request):
         Convenor = Team.objects.filter(post_assign="CC").all()
         Manager = Team.objects.filter(post_assign="MM").all()
         Coordinator = Team.objects.filter(post_assign="CO").all()
@@ -24,9 +42,9 @@ class TeamApi(APIView):
         serializer3 = TeamSerializer(Coordinator, many=True)
 
         dict = {'Convenor': serializer1.data,
-                'Manager': serializer2.data, 'Coordinator': serializer3.data}
+                'Manager': serializer2.data, 'Executive': serializer3.data}
 
-        return Response(dict)
+        return Response({'status' : 'True','body': dict}, status.HTTP_200_OK)
 
 
 class Alumini(APIView):
