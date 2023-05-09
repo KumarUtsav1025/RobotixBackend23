@@ -21,19 +21,20 @@ DOMAIN_CHOICE = (
 class Team(models.Model):
 
     photo = models.ImageField(upload_to="about/team/", null=True)
-    name = models.CharField(max_length=250, null=True)
-    branch = models.CharField(max_length=250, null=True)
+    name = models.CharField(max_length=250)
+    branch = models.CharField(max_length=250)
     domain_assign = models.CharField(
-        choices=DOMAIN_CHOICE, max_length=2, null=True)
+        choices=DOMAIN_CHOICE, max_length=2)
     post_assign = models.CharField(
-        choices=POST_CHOICES, max_length=50, null=True)
+        choices=POST_CHOICES, max_length=50)
+    linkedin_url=models.URLField(blank=True, null=True)
     fb_url = models.URLField(blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
     github_url = models.URLField(blank=True, null=True)
-    email_id = models.EmailField(blank=True, null=True)
+    email_id = models.EmailField(blank=True)
     phone = models.CharField(max_length=100, blank=True, null=True)
     joining = models.DateField(auto_created=False, blank=True, null=True)
-    studying_year = models.CharField(max_length=250, null=True)
+    studying_year = models.CharField(max_length=250)
 
     class Meta:
         ordering = ['pk']
@@ -46,14 +47,15 @@ class Alumni(models.Model):
 
     photo = models.ImageField(
         upload_to="about/team/", null=True)
-    name = models.CharField(max_length=250, null=True)
-    branch = models.CharField(max_length=250, null=True)
+    name = models.CharField(max_length=250)
+    branch = models.CharField(max_length=250)
     domain_assign = models.CharField(
-        choices=DOMAIN_CHOICE, max_length=2, null=True)
+        choices=DOMAIN_CHOICE, max_length=2)
     fb_url = models.URLField(blank=True, null=True)
+    linkedin_url=models.URLField(blank=True, null=True)
     instagram_url = models.URLField(blank=True, null=True)
     github_url = models.URLField(blank=True, null=True)
-    email_id = models.EmailField(blank=True, null=True)
+    email_id = models.EmailField(blank=True)
     phone = models.CharField(max_length=100, blank=True, null=True)
     joining = models.DateField(auto_created=False, blank=True, null=True)
 

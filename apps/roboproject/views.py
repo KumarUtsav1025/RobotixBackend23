@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 class PostAPI(APIView):
     
     parser_class = [MultiPartParser, FormParser]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         data = request.data
@@ -30,7 +30,7 @@ class PostAPI(APIView):
             obj.delete()
             return Response({'status' : 'False','message': 'Post Deleted'}, status.HTTP_200_OK)
         else: 
-            return Response({'status' : 'False','message': 'Pehli fursat mein nikal'}, status.HTTP_400_BAD_REQUEST)
+            return Response({'status' : 'False','message': 'Invalid Access'}, status.HTTP_400_BAD_REQUEST)
             
 
 
@@ -93,7 +93,7 @@ def verify(request, pk):
         else:
             return Response({'status' : 'False','body': serializer.errors}, status.HTTP_400_BAD_REQUEST)
     else: 
-        return Response({'status' : 'False','message': 'Admin bnja phle'}, status.HTTP_401_UNAUTHORIZED)
+        return Response({'status' : 'False','message': 'Invalid Access'}, status.HTTP_401_UNAUTHORIZED)
 
 
 
@@ -105,4 +105,4 @@ def get_unverified(request):
         serializer = PostSerializer(objs, many = True)
         return Response({'status' : 'True','body': serializer.data}, status.HTTP_200_OK)
     else: 
-        return Response({'status' : 'False','message': 'Pehli fursat mein nikal'}, status.HTTP_401_UNAUTHORIZED)
+        return Response({'status' : 'False','message': 'Invalid Access'}, status.HTTP_401_UNAUTHORIZED)
