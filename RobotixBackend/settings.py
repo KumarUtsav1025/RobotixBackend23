@@ -189,10 +189,12 @@ SIMPLE_JWT = {
 
 PASSWORD_RESET_TIMEOUT=900          # 900 Sec = 15 Min
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:4200",
+#     "http://127.0.0.1:3000",
+# ]
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_NAME'),
