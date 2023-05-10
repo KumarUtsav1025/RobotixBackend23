@@ -6,6 +6,10 @@ from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import APIView, api_view, permission_classes
+from .models import User
+
+
 
 # Generate Token Manually
 def get_tokens_for_user(user):
@@ -67,3 +71,30 @@ class UserPasswordResetView(APIView):
     serializer.is_valid(raise_exception=True)
     return Response({'msg':'Password Reset Successfully'}, status=status.HTTP_200_OK)
 
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def verify(request, pk):
+    if request.user.is_admin:
+        obj=User.objects.get(id = pk)
+        data= {"tc": True}
+        serializer = UserProfileSerializer(obj, data= data, partial = True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status' : 'True','body': serializer.data}, status.HTTP_200_OK)
+        else:
+            return Response({'status' : 'False','body': serializer.errors}, status.HTTP_400_BAD_REQUEST)
+    else: 
+        return Response({'status' : 'False','message': 'Invalid Access'}, status.HTTP_401_UNAUTHORIZED)
+
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_users(request):
+    if request.user.is_admin:
+        objs = User.objects.filter(tc=False)
+        serializer = UserProfileSerializer(objs, many = True)
+        return Response({'status' : 'True','body': serializer.data}, status.HTTP_200_OK)
+    else: 
+        return Response({'status' : 'False','message': 'Invalid Access'}, status.HTTP_401_UNAUTHORIZED)
