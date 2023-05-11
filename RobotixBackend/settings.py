@@ -34,7 +34,7 @@ INSTALLED_APPS = [
 
 
     'cloudinary_storage',
-    'rest_framework_swagger',
+    'drf_yasg'
 ]
 
 MIDDLEWARE = [
@@ -185,6 +185,16 @@ SIMPLE_JWT = {
 
     'JTI_CLAIM': 'jti',
 
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 PASSWORD_RESET_TIMEOUT=900          # 900 Sec = 15 Min

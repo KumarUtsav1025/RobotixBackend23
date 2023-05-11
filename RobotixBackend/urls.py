@@ -1,15 +1,28 @@
 from django.contrib import admin
-from django.urls import path, include,re_path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from rest_framework_swagger.views import get_swagger_view
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
 
-schema_view = get_swagger_view(title='RoboProject API')
+from drf_yasg import openapi
+
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Robotix Web API",
+      default_version='v1',
+      description="Test description",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/about/', include('about.urls'), name="about"),
     path('api/user/', include('account.urls')),
     path('api/post/', include('roboproject.urls')),
-    re_path(r'api/doc/', schema_view)
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
+]
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
